@@ -1,0 +1,30 @@
+{
+  "messages": [
+    {
+      "message": "Hello three",
+      "author": "3",
+      "parentId": null,
+      "id": 3
+    },
+    {
+      "message": "Hello again",
+      "author": "1",
+      "parentId": null,
+      "id": 4
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "First user"
+    },
+    {
+      "id": 2,
+      "name": "Second user"
+    },
+    {
+      "id": 3,
+      "name": "Third user"
+    }
+  ]
+}
