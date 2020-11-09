@@ -1,11 +1,12 @@
 export interface Message {
-    id: string
+    id: number
     message: string
     parentId: number | null
-    author: string
+    author: number
 }
 
 export interface User {
-    id: string
+    id: number
     name: string
+    imageUrl: string
 }
