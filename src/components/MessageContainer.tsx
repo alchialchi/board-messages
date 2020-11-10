@@ -63,6 +63,16 @@ const AddMessageWrapper = styled.div`
   }
 `
 
+const loadMessages = async (): Promise<Message[]> => {
+  const response = await fetch('http://localhost:3000/messages')
+  return response.json()
+}
+
+const loadUsers = async (): Promise<User[]> => {
+  const response = await fetch('http://localhost:3000/users')
+  return response.json()
+}
+
 export const MessageContainer: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([])
   const [users, setUsers] = useState<User[]>([])
@@ -70,8 +80,7 @@ export const MessageContainer: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(1)
 
   const fetchData = async () => {
-    const response = await fetch('http://localhost:3000/messages')
-    const newMessages = await response.json()
+    const newMessages = await loadMessages()
     setMessages(newMessages)
   }
 
@@ -80,8 +89,7 @@ export const MessageContainer: React.FC = () => {
   }, [])
 
   const fetchUsers = async () => {
-    const response = await fetch('http://localhost:3000/users')
-    const getUsers = await response.json()
+    const getUsers = await loadUsers()
     setUsers(getUsers)
   }
 
@@ -127,7 +135,7 @@ export const MessageContainer: React.FC = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         message: message.message,
-        author: selectedIndex,
+        author: message.author,
         parentId: message.parentId,
       }),
     })
@@ -137,14 +145,18 @@ export const MessageContainer: React.FC = () => {
     setMessageInput(event.target.value)
   }
 
-  const saveEditMessage = async (message: Message) => {
-    await sendUpdateMessage(message)
-    fetchData()
+  const saveEditMessage = async (editedMessage: Message) => {
+    await sendUpdateMessage(editedMessage)
+    setMessages(
+      messages.map((message) =>
+        message.id !== editedMessage.id ? message : editedMessage
+      )
+    )
   }
 
   const removeMessage = async (id: number) => {
     await deleteDeleteMessage(id)
-    fetchData()
+    setMessages(messages.filter((message) => message.id !== id))
   }
 
   const placeReply = async (parentId: number, message: string) => {
