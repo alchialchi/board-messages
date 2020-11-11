@@ -1,6 +1,8 @@
-import React, { useState, useEffect, ChangeEvent } from 'react'
+import React, { useState, useEffect, ChangeEvent, useContext } from 'react'
 import { Message, User } from '../types'
 import styled from '@emotion/styled'
+
+import { CurrentUserContext } from './userContext'
 
 import {
   Typography,
@@ -77,7 +79,9 @@ export const MessageContainer: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([])
   const [users, setUsers] = useState<User[]>([])
   const [messageInput, setMessageInput] = useState('')
-  const [selectedIndex, setSelectedIndex] = useState(1)
+  const [selectedIndex, setSelectedIndex] = useState(0)
+
+  const [currentUser, setCurrentUser] = useState<User>()
 
   const fetchData = async () => {
     const newMessages = await loadMessages()
@@ -164,16 +168,12 @@ export const MessageContainer: React.FC = () => {
     fetchData()
   }
 
-  const setUser = (user: User) => {
-    localStorage.setItem('activeUser', JSON.stringify(user))
-  }
-
   const handleListItemClick = async (
     event: ChangeEvent<any>,
     user: User,
     id: number
   ) => {
-    await setUser(user)
+    await setCurrentUser(user)
     setSelectedIndex(id)
   }
 
@@ -186,53 +186,54 @@ export const MessageContainer: React.FC = () => {
     }
   }
 
-  const activeUserNow = JSON.parse(localStorage.getItem('activeUser') || '{}')
+  console.log(currentUser)
 
   return (
-    <Wrapper>
-      <StartThreadContainer>
-        <UsersWrapper>
-          <Typography component="h2" variant="h6">
-            Users
-          </Typography>
-          <List>
-            {users.map((user: User) => (
-              <ListItem
-                key={user.id}
-                button={true}
-                onClick={(event) => handleListItemClick(event, user, user.id)}
-                selected={selectedIndex === user.id}
-              >
-                <ListItemAvatar>
-                  <Avatar alt={user.name} src={user.imageUrl} />
-                </ListItemAvatar>
-                <ListItemText primary={user.name} />
-              </ListItem>
-            ))}
-          </List>
-        </UsersWrapper>
-        <AddMessageWrapper>
-          <TextField
-            id="filled-multiline-static"
-            label="Add message"
-            defaultValue="Default Value"
-            variant="standard"
-            onChange={createMessage}
-            value={messageInput}
-          />
-          <Button variant="contained" color="primary" onClick={addMessage}>
-            Add message
-          </Button>
-        </AddMessageWrapper>
-      </StartThreadContainer>
-      <MessageBoard
-        messages={messages}
-        deleteMessage={removeMessage}
-        replyMessage={placeReply}
-        editMessage={saveEditMessage}
-        users={users}
-        activeUser={activeUserNow}
-      />
-    </Wrapper>
+    <CurrentUserContext.Provider value={currentUser}>
+      <Wrapper>
+        <StartThreadContainer>
+          <UsersWrapper>
+            <Typography component="h2" variant="h6">
+              Users
+            </Typography>
+            <List>
+              {users.map((user: User) => (
+                <ListItem
+                  key={user.id}
+                  button={true}
+                  onClick={(event) => handleListItemClick(event, user, user.id)}
+                  selected={selectedIndex === user.id}
+                >
+                  <ListItemAvatar>
+                    <Avatar alt={user.name} src={user.imageUrl} />
+                  </ListItemAvatar>
+                  <ListItemText primary={user.name} />
+                </ListItem>
+              ))}
+            </List>
+          </UsersWrapper>
+          <AddMessageWrapper>
+            <TextField
+              id="filled-multiline-static"
+              label="Add message"
+              defaultValue="Default Value"
+              variant="standard"
+              onChange={createMessage}
+              value={messageInput}
+            />
+            <Button variant="contained" color="primary" onClick={addMessage}>
+              Add message
+            </Button>
+          </AddMessageWrapper>
+        </StartThreadContainer>
+        <MessageBoard
+          messages={messages}
+          deleteMessage={removeMessage}
+          replyMessage={placeReply}
+          editMessage={saveEditMessage}
+          users={users}
+        />
+      </Wrapper>
+    </CurrentUserContext.Provider>
   )
 }

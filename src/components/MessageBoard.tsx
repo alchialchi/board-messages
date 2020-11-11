@@ -10,7 +10,6 @@ interface Props {
   editMessage: (message: Message) => void
   replyMessage: (parentId: number, message: string) => void
   users: User[]
-  activeUser: User
 }
 
 export const MessageBoard: React.FC<Props> = ({
@@ -19,7 +18,6 @@ export const MessageBoard: React.FC<Props> = ({
   editMessage,
   replyMessage,
   users,
-  activeUser,
 }) => {
   return (
     <Grid
@@ -51,7 +49,6 @@ export const MessageBoard: React.FC<Props> = ({
                     replyMessage={replyMessage}
                     editMessage={editMessage}
                     users={users}
-                    activeUser={activeUser}
                   />
                 </Grid>
               ) : null}

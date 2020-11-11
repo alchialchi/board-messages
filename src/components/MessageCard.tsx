@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Message, User } from '../types'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
@@ -9,9 +9,7 @@ import {
   CardActions,
   Typography,
   List,
-  ListItem,
   Avatar,
-  ListItemText,
 } from '@material-ui/core'
 
 import IconButton from '@material-ui/core/IconButton'
@@ -22,6 +20,8 @@ import { DeleteComponent } from './DeletComponent'
 import { ReplyComponent } from './ReplyComponent'
 import { CommentCard } from './CommentCard'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+
+import { useCurrentUser } from './userContext'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,12 +55,10 @@ interface Props {
   editMessage: (message: Message) => void
   replyMessage: (parentId: number, message: string) => void
   users: User[]
-  activeUser: User
 }
 
 export const MessageCard: React.FC<Props> = ({
   messages,
-  activeUser,
   currentMessage,
   deleteMessage,
   replyMessage,
@@ -82,13 +80,19 @@ export const MessageCard: React.FC<Props> = ({
     (user: User) => user.id === currentMessage.author
   )
 
+  const currentUser = useCurrentUser()
+
+  if (!currentUser) {
+    return null
+  }
+
   return (
     <Card variant="outlined" className={classes.root}>
       {author ? (
         <CardHeader
           avatar={<Avatar aria-label={author.name} src={author.imageUrl} />}
           action={
-            activeUser.id === currentMessage.author ? (
+            currentUser.id === currentMessage.author ? (
               <DeleteComponent
                 deleteMessage={deleteMessage}
                 currentMessage={currentMessage}
@@ -104,7 +108,7 @@ export const MessageCard: React.FC<Props> = ({
         </Typography>
       </CardContent>
       <CardActions disableSpacing={true}>
-        {activeUser.id === currentMessage.author ? (
+        {currentUser.id === currentMessage.author ? (
           <React.Fragment>
             <EditComponent
               editMessage={editMessage}
@@ -146,7 +150,6 @@ export const MessageCard: React.FC<Props> = ({
                     author={commentAuthor}
                     message={message}
                     key={message.id}
-                    activeUser={activeUser}
                     editMessage={editMessage}
                     deleteMessage={deleteMessage}
                   />

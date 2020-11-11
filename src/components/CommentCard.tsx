@@ -12,6 +12,8 @@ import { Message, User } from '../types'
 import { EditComponent } from './EditComponent'
 import { DeleteComponent } from './DeletComponent'
 
+import { useCurrentUser } from './userContext'
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -33,7 +35,6 @@ const ActionsContainer = styled.div`
 
 interface Props {
   message: Message
-  activeUser: User
   author: User
   deleteMessage: (id: number) => void
   editMessage: (message: Message) => void
@@ -41,12 +42,17 @@ interface Props {
 
 export const CommentCard: React.FC<Props> = ({
   message,
-  activeUser,
   author,
   deleteMessage,
   editMessage,
 }) => {
   const classes = useStyles()
+
+  const currentUser = useCurrentUser()
+
+  if (!currentUser) {
+    return null
+  }
 
   return (
     <React.Fragment>
@@ -81,7 +87,7 @@ export const CommentCard: React.FC<Props> = ({
           }
         />
       </ListItem>
-      {activeUser.id === message.author ? (
+      {currentUser.id === message.author ? (
         <ActionsContainer>
           <EditComponent editMessage={editMessage} currentMessage={message} />
           <DeleteComponent

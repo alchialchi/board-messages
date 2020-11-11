@@ -1,76 +1,28 @@
 {
   "messages": [
     {
-      "message": "Pis pis",
+      "message": "Hello",
       "author": 1,
       "parentId": null,
       "id": 1
     },
     {
-      "message": "",
+      "message": "Hello",
       "author": 1,
-      "parentId": 2,
+      "parentId": 1,
+      "id": 2
+    },
+    {
+      "message": "Howdy",
+      "author": 2,
+      "parentId": 1,
       "id": 3
     },
     {
-      "message": "",
+      "message": "Hello",
       "author": 2,
-      "parentId": 2,
+      "parentId": null,
       "id": 4
-    },
-    {
-      "message": "",
-      "author": 1,
-      "parentId": 2,
-      "id": 5
-    },
-    {
-      "message": "Piss",
-      "author": 1,
-      "parentId": null,
-      "id": 6
-    },
-    {
-      "message": "Pis pis",
-      "author": 1,
-      "parentId": 1,
-      "id": 7
-    },
-    {
-      "message": "Hello",
-      "author": 1,
-      "parentId": 1,
-      "id": 8
-    },
-    {
-      "message": "Homer comment",
-      "author": 3,
-      "parentId": 1,
-      "id": 9
-    },
-    {
-      "message": "Hello",
-      "author": 3,
-      "parentId": null,
-      "id": 10
-    },
-    {
-      "message": "uioeui",
-      "author": 3,
-      "parentId": 1,
-      "id": 11
-    },
-    {
-      "message": "Hello",
-      "author": 3,
-      "parentId": 10,
-      "id": 12
-    },
-    {
-      "message": "Update message",
-      "author": 2,
-      "parentId": 10,
-      "id": 13
     }
   ],
   "users": [
