@@ -1,9 +1,6 @@
-import React, { useState, useEffect, ChangeEvent, useContext } from 'react'
-import { Message, User } from '../types'
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react'
+import { User } from '../types'
 import styled from '@emotion/styled'
-
-import { CurrentUserContext } from './userContext'
-
 import {
   Typography,
   Button,
@@ -14,6 +11,8 @@ import {
   ListItemText,
   TextField,
 } from '@material-ui/core'
+
+import { CurrentUserContext, useMessagesContext } from './userContext'
 import { MessageBoard } from './MessageBoard'
 
 const Wrapper = styled.div`
@@ -50,7 +49,7 @@ const UsersWrapper = styled.div`
   }
 `
 
-const AddMessageWrapper = styled.div`
+const AddMessageForm = styled.form`
   display: flex;
   width: 320px;
   justify-content: space-between;
@@ -65,31 +64,22 @@ const AddMessageWrapper = styled.div`
   }
 `
 
-const loadMessages = async (): Promise<Message[]> => {
-  const response = await fetch('http://localhost:3000/messages')
-  return response.json()
-}
-
 const loadUsers = async (): Promise<User[]> => {
   const response = await fetch('http://localhost:3000/users')
   return response.json()
 }
 
 export const MessageContainer: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([])
   const [users, setUsers] = useState<User[]>([])
-  const [messageInput, setMessageInput] = useState('')
+  const [newMessage, setNewMessage] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
 
   const [currentUser, setCurrentUser] = useState<User>()
 
-  const fetchData = async () => {
-    const newMessages = await loadMessages()
-    setMessages(newMessages)
-  }
+  const { fetchMessages } = useMessagesContext()
 
   useEffect(() => {
-    fetchData()
+    fetchMessages()
   }, [])
 
   const fetchUsers = async () => {
@@ -106,7 +96,7 @@ export const MessageContainer: React.FC = () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        message: messageInput,
+        message: newMessage,
         author: selectedIndex,
         parentId: null,
       }),
@@ -114,58 +104,8 @@ export const MessageContainer: React.FC = () => {
     await fetch('http://localhost:3000/messages', requestMessage)
   }
 
-  const makeComment = async (parentId: number, message: string) => {
-    const comment = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message,
-        author: selectedIndex,
-        parentId,
-      }),
-    }
-    await fetch('http://localhost:3000/messages', comment)
-  }
-
-  const deleteDeleteMessage = async (id: number) => {
-    await fetch(`http://localhost:3000/messages/${id}`, {
-      method: 'DELETE',
-    })
-  }
-
-  const sendUpdateMessage = async (message: Message) => {
-    await fetch(`http://localhost:3000/messages/${message.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: message.message,
-        author: message.author,
-        parentId: message.parentId,
-      }),
-    })
-  }
-
   const createMessage = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setMessageInput(event.target.value)
-  }
-
-  const saveEditMessage = async (editedMessage: Message) => {
-    await sendUpdateMessage(editedMessage)
-    setMessages(
-      messages.map((message) =>
-        message.id !== editedMessage.id ? message : editedMessage
-      )
-    )
-  }
-
-  const removeMessage = async (id: number) => {
-    await deleteDeleteMessage(id)
-    setMessages(messages.filter((message) => message.id !== id))
-  }
-
-  const placeReply = async (parentId: number, message: string) => {
-    await makeComment(parentId, message)
-    fetchData()
+    setNewMessage(event.target.value)
   }
 
   const handleListItemClick = async (
@@ -180,13 +120,18 @@ export const MessageContainer: React.FC = () => {
   const addMessage = async () => {
     if (selectedIndex !== 0) {
       await sendMessage()
-      fetchData()
+      fetchMessages()
     } else {
       console.log('error')
     }
   }
 
-  console.log(currentUser)
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault()
+    addMessage()
+  }
+
+  const disableForm = selectedIndex === 0 || newMessage === ''
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -212,27 +157,27 @@ export const MessageContainer: React.FC = () => {
               ))}
             </List>
           </UsersWrapper>
-          <AddMessageWrapper>
+          <AddMessageForm onSubmit={handleSubmit}>
             <TextField
               id="filled-multiline-static"
               label="Add message"
               defaultValue="Default Value"
               variant="standard"
               onChange={createMessage}
-              value={messageInput}
+              value={newMessage}
             />
-            <Button variant="contained" color="primary" onClick={addMessage}>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              onClick={handleSubmit}
+              disabled={disableForm ? true : false}
+            >
               Add message
             </Button>
-          </AddMessageWrapper>
+          </AddMessageForm>
         </StartThreadContainer>
-        <MessageBoard
-          messages={messages}
-          deleteMessage={removeMessage}
-          replyMessage={placeReply}
-          editMessage={saveEditMessage}
-          users={users}
-        />
+        <MessageBoard users={users} />
       </Wrapper>
     </CurrentUserContext.Provider>
   )

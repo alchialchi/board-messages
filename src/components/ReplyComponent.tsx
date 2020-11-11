@@ -1,73 +1,107 @@
-import React, { useState, ChangeEvent } from 'react'
+import React, { useState, ChangeEvent, FormEvent } from 'react'
 import { Message } from '../types'
 
 import CommentIcon from '@material-ui/icons/Comment'
-import { Button, IconButton } from '@material-ui/core'
+import {
+  Button,
+  IconButton,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@material-ui/core'
 
-import TextField from '@material-ui/core/TextField'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
+import { useCurrentUser, useMessagesContext } from './userContext'
 
 interface Props {
   currentMessage: Message
-  replyMessage: (parentId: number, message: string) => void
 }
 
-export const ReplyComponent: React.FC<Props> = ({
-  currentMessage,
-  replyMessage,
-}) => {
+export const ReplyComponent: React.FC<Props> = ({ currentMessage }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [messageInput, setMessageInput] = useState<string>('')
 
-  const handleClickOpen = () => {
-    setOpen(true)
+  const { fetchMessages } = useMessagesContext()
+  const currentUser = useCurrentUser()
+
+  if (!currentUser) {
+    return null
   }
 
-  const handleClose = () => {
-    setOpen(false)
+  const handleClick = () => {
+    setOpen(!open)
+  }
+
+  const makeComment = async (parentId: number, message: string) => {
+    const comment = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message,
+        author: currentUser.id,
+        parentId,
+      }),
+    }
+    await fetch('http://localhost:3000/messages', comment).catch((err) =>
+      console.error(err)
+    )
+  }
+
+  const placeReply = async (parentId: number, message: string) => {
+    await makeComment(parentId, message)
+    fetchMessages()
   }
 
   const createMessage = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setMessageInput(event.target.value)
   }
 
-  const addComment = () => {
-    replyMessage(currentMessage.id, messageInput)
-    setOpen(false)
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault()
+    placeReply(currentMessage.id, messageInput)
+    setOpen(!open)
   }
+
+  const isFieldEmpty = messageInput === ''
 
   return (
     <React.Fragment>
       <IconButton
         aria-label="Reply message"
         color="primary"
-        onClick={handleClickOpen}
+        onClick={handleClick}
       >
         <CommentIcon />
       </IconButton>
       <Dialog open={open}>
         <DialogTitle>Write your comment message</DialogTitle>
         <DialogContent>
-          <TextField
-            autoFocus={true}
-            margin="dense"
-            multiline={true}
-            rows={4}
-            label="Add comment"
-            fullWidth={true}
-            onChange={createMessage}
-            value={messageInput}
-            variant="filled"
-          />
+          <form id="reply-form" onSubmit={handleSubmit}>
+            <TextField
+              autoFocus={true}
+              margin="dense"
+              multiline={true}
+              rows={4}
+              label="Add comment"
+              fullWidth={true}
+              onChange={createMessage}
+              value={messageInput}
+              variant="filled"
+            />
+          </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="secondary">
+          <Button onClick={handleClick} color="secondary">
             Cancel
           </Button>
-          <Button onClick={addComment} color="primary">
+          <Button
+            form="reply-form"
+            type="submit"
+            onClick={handleSubmit}
+            color="primary"
+            disabled={isFieldEmpty ? true : false}
+          >
             Comment on thread
           </Button>
         </DialogActions>

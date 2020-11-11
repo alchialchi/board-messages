@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Message, User } from '../types'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
@@ -10,16 +10,15 @@ import {
   Typography,
   List,
   Avatar,
+  IconButton,
+  Collapse,
 } from '@material-ui/core'
-
-import IconButton from '@material-ui/core/IconButton'
-import Collapse from '@material-ui/core/Collapse'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import { EditComponent } from './EditComponent'
-import { DeleteComponent } from './DeletComponent'
+import { DeleteComponent } from './DeleteComponent'
 import { ReplyComponent } from './ReplyComponent'
 import { CommentCard } from './CommentCard'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import { useCurrentUser } from './userContext'
 
@@ -29,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     height: 0,
-    paddingTop: '56.25%', // 16:9
+    paddingTop: '56.25%',
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -51,18 +50,12 @@ const useStyles = makeStyles((theme) => ({
 interface Props {
   messages: Message[]
   currentMessage: Message
-  deleteMessage: (id: number) => void
-  editMessage: (message: Message) => void
-  replyMessage: (parentId: number, message: string) => void
   users: User[]
 }
 
 export const MessageCard: React.FC<Props> = ({
   messages,
   currentMessage,
-  deleteMessage,
-  replyMessage,
-  editMessage,
   users,
 }) => {
   const classes = useStyles()
@@ -82,44 +75,35 @@ export const MessageCard: React.FC<Props> = ({
 
   const currentUser = useCurrentUser()
 
-  if (!currentUser) {
-    return null
-  }
-
   return (
-    <Card variant="outlined" className={classes.root}>
-      {author ? (
-        <CardHeader
-          avatar={<Avatar aria-label={author.name} src={author.imageUrl} />}
-          action={
-            currentUser.id === currentMessage.author ? (
-              <DeleteComponent
-                deleteMessage={deleteMessage}
-                currentMessage={currentMessage}
-              />
-            ) : null
-          }
-          title={author.name}
-        />
-      ) : null}
+    <Card variant="outlined" className={classes.root} key={currentMessage.id}>
+      <CardHeader
+        avatar={
+          <Avatar
+            aria-label={author && author.name}
+            src={author && author.imageUrl}
+          />
+        }
+        action={
+          currentUser && currentUser.id === currentMessage.author ? (
+            <DeleteComponent currentMessage={currentMessage} />
+          ) : null
+        }
+        title={author && author.name}
+      />
+
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
           {currentMessage.message}
         </Typography>
       </CardContent>
       <CardActions disableSpacing={true}>
-        {currentUser.id === currentMessage.author ? (
+        {currentUser && currentUser.id === currentMessage.author ? (
           <React.Fragment>
-            <EditComponent
-              editMessage={editMessage}
-              currentMessage={currentMessage}
-            />
+            <EditComponent currentMessage={currentMessage} />
           </React.Fragment>
         ) : null}
-        <ReplyComponent
-          replyMessage={replyMessage}
-          currentMessage={currentMessage}
-        />
+        <ReplyComponent currentMessage={currentMessage} />
         {childrenMessages.length ? (
           <IconButton
             className={clsx(classes.expand, {
@@ -133,7 +117,7 @@ export const MessageCard: React.FC<Props> = ({
           </IconButton>
         ) : null}
       </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse in={expanded} timeout="auto" unmountOnExit={true}>
         {childrenMessages.length ? (
           <CardContent>
             <Typography variant="h6">Comments</Typography>
@@ -150,8 +134,6 @@ export const MessageCard: React.FC<Props> = ({
                     author={commentAuthor}
                     message={message}
                     key={message.id}
-                    editMessage={editMessage}
-                    deleteMessage={deleteMessage}
                   />
                 )
               })}

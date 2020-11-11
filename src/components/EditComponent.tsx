@@ -1,50 +1,66 @@
-import React, { useState, ChangeEvent } from 'react'
+import React, { useState, ChangeEvent, useEffect } from 'react'
 import EditIcon from '@material-ui/icons/Edit'
-import { IconButton, Button } from '@material-ui/core'
-
-import TextField from '@material-ui/core/TextField'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
+import {
+  TextField,
+  Dialog,
+  IconButton,
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@material-ui/core'
 
 import { Message } from '../types'
+import { useMessagesContext } from './userContext'
 
 interface Props {
-  editMessage: (message: Message) => void
   currentMessage: Message
 }
 
-export const EditComponent: React.FC<Props> = ({
-  editMessage,
-  currentMessage,
-}) => {
-  const [messageText, setMessageText] = useState<string>(currentMessage.message)
+export const EditComponent: React.FC<Props> = ({ currentMessage }) => {
+  const [updatedMessage, setUpdatedMessage] = useState<string>(
+    currentMessage.message
+  )
   const [open, setOpen] = React.useState(false)
 
-  const handleClickOpen = () => {
-    setOpen(true)
+  const { fetchMessages } = useMessagesContext()
+
+  useEffect(() => {
+    fetchMessages()
+  }, [])
+
+  const sendUpdatedMessage = async (message: Message) => {
+    await fetch(`http://localhost:3000/messages/${message.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: updatedMessage,
+        author: currentMessage.author,
+        parentId: currentMessage.parentId,
+      }),
+    }).catch((err) => console.error(err))
   }
 
-  const handleClose = () => {
-    setOpen(false)
-  }
-
-  const saveAndContinue = () => {
-    editMessage({ ...currentMessage, message: messageText })
-    setOpen(false)
+  const handleClick = () => {
+    setOpen(!open)
   }
 
   const updateMessage = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setMessageText(event.target.value)
+    setUpdatedMessage(event.target.value)
+  }
+
+  const saveMessage = async () => {
+    await sendUpdatedMessage({ ...currentMessage, message: updatedMessage })
+    setOpen(!open)
+    fetchMessages()
   }
 
   return (
     <React.Fragment>
-      <IconButton aria-label="Edit message" onClick={handleClickOpen}>
+      <IconButton aria-label="Edit message" onClick={handleClick}>
         <EditIcon />
       </IconButton>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClick}>
         <DialogTitle id="form-dialog-title">Edit your message</DialogTitle>
         <DialogContent>
           <TextField
@@ -56,15 +72,15 @@ export const EditComponent: React.FC<Props> = ({
             label="Update message"
             fullWidth={true}
             onChange={updateMessage}
-            value={messageText}
+            value={updatedMessage}
             variant="filled"
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="secondary">
+          <Button onClick={handleClick} color="secondary">
             Cancel
           </Button>
-          <Button onClick={saveAndContinue} color="primary">
+          <Button onClick={saveMessage} color="primary">
             Save
           </Button>
         </DialogActions>

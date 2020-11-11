@@ -1,24 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Grid, Typography } from '@material-ui/core'
 import { MessageCard } from './MessageCard'
 
 import { Message, User } from '../types'
+import { useMessagesContext } from './userContext'
 
 interface Props {
-  messages: Message[]
-  deleteMessage: (id: number) => void
-  editMessage: (message: Message) => void
-  replyMessage: (parentId: number, message: string) => void
   users: User[]
 }
 
-export const MessageBoard: React.FC<Props> = ({
-  messages,
-  deleteMessage,
-  editMessage,
-  replyMessage,
-  users,
-}) => {
+export const MessageBoard: React.FC<Props> = ({ users }) => {
+  const { messages, fetchMessages } = useMessagesContext()
+
+  useEffect(() => {
+    fetchMessages()
+  }, [])
+
   return (
     <Grid
       container={true}
@@ -45,9 +42,6 @@ export const MessageBoard: React.FC<Props> = ({
                   <MessageCard
                     messages={messages}
                     currentMessage={message}
-                    deleteMessage={deleteMessage}
-                    replyMessage={replyMessage}
-                    editMessage={editMessage}
                     users={users}
                   />
                 </Grid>

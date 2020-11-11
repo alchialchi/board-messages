@@ -1,16 +1,18 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
-import ListItem from '@material-ui/core/ListItem'
-import Divider from '@material-ui/core/Divider'
-import ListItemText from '@material-ui/core/ListItemText'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import Avatar from '@material-ui/core/Avatar'
-import Typography from '@material-ui/core/Typography'
+import {
+  Typography,
+  Avatar,
+  ListItemAvatar,
+  ListItemText,
+  Divider,
+  ListItem,
+} from '@material-ui/core'
 import { Message, User } from '../types'
 
 import { EditComponent } from './EditComponent'
-import { DeleteComponent } from './DeletComponent'
+import { DeleteComponent } from './DeleteComponent'
 
 import { useCurrentUser } from './userContext'
 
@@ -36,23 +38,12 @@ const ActionsContainer = styled.div`
 interface Props {
   message: Message
   author: User
-  deleteMessage: (id: number) => void
-  editMessage: (message: Message) => void
 }
 
-export const CommentCard: React.FC<Props> = ({
-  message,
-  author,
-  deleteMessage,
-  editMessage,
-}) => {
+export const CommentCard: React.FC<Props> = ({ message, author }) => {
   const classes = useStyles()
 
   const currentUser = useCurrentUser()
-
-  if (!currentUser) {
-    return null
-  }
 
   return (
     <React.Fragment>
@@ -87,13 +78,10 @@ export const CommentCard: React.FC<Props> = ({
           }
         />
       </ListItem>
-      {currentUser.id === message.author ? (
+      {currentUser && currentUser.id === message.author ? (
         <ActionsContainer>
-          <EditComponent editMessage={editMessage} currentMessage={message} />
-          <DeleteComponent
-            deleteMessage={deleteMessage}
-            currentMessage={message}
-          />
+          <EditComponent currentMessage={message} />
+          <DeleteComponent currentMessage={message} />
         </ActionsContainer>
       ) : null}
       <Divider variant="inset" component="li" />
