@@ -8,11 +8,7 @@ import { MessageCard } from './MessageCard'
 
 describe('MessageCard', () => {
   const users = [
-    {
-      id: 1,
-      name: 'First',
-      imageUrl: '',
-    },
+    { id: 1, name: 'First', imageUrl: '' },
     { id: 2, name: 'Second', imageUrl: '' },
     { id: 3, name: 'Thrird', imageUrl: '' },
   ]

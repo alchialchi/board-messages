@@ -12,6 +12,7 @@ import {
   Avatar,
   IconButton,
   Collapse,
+  Grid,
 } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
@@ -24,7 +25,7 @@ import { useCurrentUser } from './userContext'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 345,
+    maxWidth: 'auto',
   },
   media: {
     height: 0,
@@ -76,71 +77,80 @@ export const MessageCard: React.FC<Props> = ({
   const currentUser = useCurrentUser()
 
   return (
-    <Card variant="outlined" className={classes.root} key={currentMessage.id}>
-      <CardHeader
-        avatar={
-          <Avatar
-            aria-label={author && author.name}
-            src={author && author.imageUrl}
-          />
-        }
-        action={
-          currentUser && currentUser.id === currentMessage.author ? (
-            <DeleteComponent currentMessage={currentMessage} />
-          ) : null
-        }
-        title={author && author.name}
-      />
+    <Grid
+      item={true}
+      key={currentMessage.id}
+      xs={12}
+      sm={6}
+      md={4}
+      style={{ padding: 16 }}
+    >
+      <Card variant="outlined" className={classes.root} key={currentMessage.id}>
+        <CardHeader
+          avatar={
+            <Avatar
+              aria-label={author && author.name}
+              src={author && author.imageUrl}
+            />
+          }
+          action={
+            currentUser && currentUser.id === currentMessage.author ? (
+              <DeleteComponent currentMessage={currentMessage} />
+            ) : null
+          }
+          title={author && author.name}
+        />
 
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {currentMessage.message}
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing={true}>
-        <ReplyComponent currentMessage={currentMessage} />
-        {currentUser && currentUser.id === currentMessage.author ? (
-          <React.Fragment>
-            <EditComponent currentMessage={currentMessage} />
-          </React.Fragment>
-        ) : null}
-        {childrenMessages.length ? (
-          <IconButton
-            className={clsx(classes.expand, {
-              [classes.expandOpen]: expanded,
-            })}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show comments"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        ) : null}
-      </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit={true}>
-        {childrenMessages.length ? (
-          <CardContent>
-            <Typography variant="h6">Comments</Typography>
-            <List className={classes.commentWrapper}>
-              {childrenMessages.map((message: Message) => {
-                const commentAuthor = users.find(
-                  (user) => user.id === message.author
-                )
-                if (!commentAuthor) {
-                  return null
-                }
-                return (
-                  <CommentCard
-                    author={commentAuthor}
-                    message={message}
-                    key={message.id}
-                  />
-                )
+        <CardContent>
+          <Typography variant="body2" color="textSecondary" component="p">
+            {currentMessage.message}
+          </Typography>
+        </CardContent>
+        <CardActions disableSpacing={true}>
+          <ReplyComponent currentMessage={currentMessage} />
+          {currentUser && currentUser.id === currentMessage.author ? (
+            <React.Fragment>
+              <EditComponent currentMessage={currentMessage} />
+            </React.Fragment>
+          ) : null}
+          {childrenMessages.length ? (
+            <IconButton
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded,
               })}
-            </List>
-          </CardContent>
-        ) : null}
-      </Collapse>
-    </Card>
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show comments"
+            >
+              <ExpandMoreIcon />
+            </IconButton>
+          ) : null}
+        </CardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit={true}>
+          {childrenMessages.length ? (
+            <CardContent>
+              <Typography variant="h6">Comments</Typography>
+              <List className={classes.commentWrapper}>
+                {childrenMessages.map((message: Message) => {
+                  const commentAuthor = users.find(
+                    (user) => user.id === message.author
+                  )
+                  if (!commentAuthor) {
+                    return null
+                  }
+                  return (
+                    <CommentCard
+                      author={commentAuthor}
+                      message={message}
+                      key={message.id}
+                    />
+                  )
+                })}
+              </List>
+            </CardContent>
+          ) : null}
+        </Collapse>
+      </Card>
+    </Grid>
   )
 }

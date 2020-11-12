@@ -73,14 +73,9 @@ export const MessageContainer: React.FC = () => {
   const [users, setUsers] = useState<User[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
-
   const [currentUser, setCurrentUser] = useState<User>()
 
   const { fetchMessages } = useMessagesContext()
-
-  useEffect(() => {
-    fetchMessages()
-  }, [])
 
   const fetchUsers = async () => {
     const getUsers = await loadUsers()

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { User, Message } from '../types'
 
@@ -13,14 +13,21 @@ export const MessagesContext = React.createContext<{
   fetchMessages: () => void
 }>({ messages: [], fetchMessages: () => undefined })
 
-export const MessagesProvider: React.FC = ({ children }) => {
-  const [messages, setMessages] = useState<Message[]>([])
+export const MessagesProvider: React.FC<{ messages?: Message[] }> = ({
+  children,
+  messages: defaultMessages = [],
+}) => {
+  const [messages, setMessages] = useState<Message[]>(defaultMessages)
 
   const fetchMessages = async () => {
     const response = await fetch('http://localhost:3000/messages')
     const newMessages = await response.json()
     setMessages(newMessages)
   }
+
+  useEffect(() => {
+    fetchMessages()
+  }, [])
 
   return (
     <MessagesContext.Provider value={{ messages, fetchMessages }}>

@@ -46,7 +46,7 @@ export const CommentCard: React.FC<Props> = ({ message, author }) => {
   const currentUser = useCurrentUser()
 
   return (
-    <React.Fragment>
+    <React.Fragment key={message.id}>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
           <Avatar alt={author.name} src={author.imageUrl} />

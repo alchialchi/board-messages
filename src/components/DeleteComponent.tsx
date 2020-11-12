@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { IconButton } from '@material-ui/core'
 
@@ -12,10 +12,6 @@ interface Props {
 export const DeleteComponent: React.FC<Props> = ({ currentMessage }) => {
   const { fetchMessages } = useMessagesContext()
 
-  useEffect(() => {
-    fetchMessages()
-  }, [])
-
   const deleteMessage = async (id: number) => {
     await fetch(`http://localhost:3000/messages/${id}`, {
       method: 'DELETE',
@@ -28,7 +24,11 @@ export const DeleteComponent: React.FC<Props> = ({ currentMessage }) => {
   }
 
   return (
-    <IconButton aria-label="Delete message" onClick={remove}>
+    <IconButton
+      aria-label="Delete message"
+      data-testid="delete-button"
+      onClick={remove}
+    >
       <DeleteIcon />
     </IconButton>
   )

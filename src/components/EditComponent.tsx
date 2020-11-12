@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect } from 'react'
+import React, { useState, ChangeEvent } from 'react'
 import EditIcon from '@material-ui/icons/Edit'
 import {
   TextField,
@@ -24,10 +24,6 @@ export const EditComponent: React.FC<Props> = ({ currentMessage }) => {
   const [open, setOpen] = React.useState(false)
 
   const { fetchMessages } = useMessagesContext()
-
-  useEffect(() => {
-    fetchMessages()
-  }, [])
 
   const sendUpdatedMessage = async (message: Message) => {
     await fetch(`http://localhost:3000/messages/${message.id}`, {
@@ -57,7 +53,11 @@ export const EditComponent: React.FC<Props> = ({ currentMessage }) => {
 
   return (
     <React.Fragment>
-      <IconButton aria-label="Edit message" onClick={handleClick}>
+      <IconButton
+        aria-label="Edit message"
+        data-testid="edit-button"
+        onClick={handleClick}
+      >
         <EditIcon />
       </IconButton>
       <Dialog open={open} onClose={handleClick}>
