@@ -1,46 +1,43 @@
-# Getting Started with Create React App
+# react-messages-board (aka what-kitty-are-you-today)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is about a message board where an active user is able to send, comment, edit or delete messages.
 
-## Available Scripts
+The application is build with React (React Hooks and Context), Typescript and Material-UI.
 
-In the project directory, you can run:
+## How to use
 
-### `npm start`
+Install [JSON Server](https://github.com/typicode/json-server) globally on your machine if you don't have it.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```bash
+npm install -g json-server
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+After it open the project folder and run the following command to install:
 
-### `npm test`
+```bash
+npm install
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+start the JSON server by running
 
-### `npm run build`
+```bash
+npm run serve
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+JSON server should be running on `http://localhost:3000`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Now you can start the development server by running
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm run start
+```
 
-### `npm run eject`
+The application should be running on `http://localhost:3006`.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Also a small test was written that you can run with
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm run test
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## How to use
