@@ -139,7 +139,7 @@ export const MessageContainer: React.FC = () => {
         <StartThreadContainer>
           <UsersWrapper>
             <Typography component="h2" variant="h6">
-              Users
+              What kitty are you today?
             </Typography>
             <List>
               {users.map((user: User) => (

@@ -1,35 +1,10 @@
 {
-  "messages": [
-    {
-      "message": "Hello",
-      "author": 1,
-      "parentId": null,
-      "id": 1
-    },
-    {
-      "message": "Hello",
-      "author": 1,
-      "parentId": 1,
-      "id": 2
-    },
-    {
-      "message": "Howdy",
-      "author": 2,
-      "parentId": 1,
-      "id": 3
-    },
-    {
-      "message": "Hello",
-      "author": 2,
-      "parentId": null,
-      "id": 4
-    }
-  ],
+  "messages": [],
   "users": [
     {
       "id": 1,
       "name": "Leeroy Jenkins",
-      "imageUrl": "https://images.pexels.com/photos/735911/pexels-photo-735911.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=75&w=126"
+      "imageUrl": "http://placekitten.com/g/100/100"
     },
     {
       "id": 2,
@@ -38,8 +13,8 @@
     },
     {
       "id": 3,
-      "name": "Homer Simpson",
-      "imageUrl": "https://images.pexels.com/photos/867452/pexels-photo-867452.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=75&w=126"
+      "name": "Tiny Rebel",
+      "imageUrl": "http://placekitten.com/g/200/300"
     }
   ]
 }
