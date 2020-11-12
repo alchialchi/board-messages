@@ -98,12 +98,12 @@ export const MessageCard: React.FC<Props> = ({
         </Typography>
       </CardContent>
       <CardActions disableSpacing={true}>
+        <ReplyComponent currentMessage={currentMessage} />
         {currentUser && currentUser.id === currentMessage.author ? (
           <React.Fragment>
             <EditComponent currentMessage={currentMessage} />
           </React.Fragment>
         ) : null}
-        <ReplyComponent currentMessage={currentMessage} />
         {childrenMessages.length ? (
           <IconButton
             className={clsx(classes.expand, {

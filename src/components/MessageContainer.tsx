@@ -129,6 +129,7 @@ export const MessageContainer: React.FC = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
     addMessage()
+    setNewMessage('')
   }
 
   const disableForm = selectedIndex === 0 || newMessage === ''

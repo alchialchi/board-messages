@@ -61,6 +61,7 @@ export const ReplyComponent: React.FC<Props> = ({ currentMessage }) => {
     event.preventDefault()
     placeReply(currentMessage.id, messageInput)
     setOpen(!open)
+    setMessageInput('')
   }
 
   const isFieldEmpty = messageInput === ''
