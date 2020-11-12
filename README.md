@@ -1,8 +1,10 @@
-# react-messages-board (aka what-kitty-are-you-today)
+# react-messages-board with kitties
 
 This project is about a message board where an active user is able to send, comment, edit or delete messages.
 
 The application is build with React (React Hooks and Context), Typescript and Material-UI.
+
+![ScreenShot](https://github.com/alchialchi/board-messages/blob/master/screenshot/preview.png)
 
 ## How to use
 
@@ -39,5 +41,3 @@ Also a small test was written that you can run with
 ```bash
 npm run test
 ```
-
-## How to use
