@@ -13,7 +13,7 @@
       "id": 2
     },
     {
-      "message": "Hello there! Is anyone up to play? ",
+      "message": "Hello there! Is anyone up to play?",
       "author": 1,
       "parentId": null,
       "id": 3
@@ -29,24 +29,6 @@
       "author": 3,
       "parentId": 3,
       "id": 5
-    },
-    {
-      "message": "Hello",
-      "author": 1,
-      "parentId": 6,
-      "id": 7
-    },
-    {
-      "message": "Hello",
-      "author": 1,
-      "parentId": null,
-      "id": 8
-    },
-    {
-      "message": "Hello",
-      "author": 1,
-      "parentId": 8,
-      "id": 9
     }
   ],
   "users": [
