@@ -102,7 +102,7 @@ export const ReplyComponent: React.FC<Props> = ({ currentMessage }) => {
             type="submit"
             onClick={handleSubmit}
             color="primary"
-            disabled={isFieldEmpty ? true : false}
+            disabled={isFieldEmpty}
           >
             Comment on thread
           </Button>

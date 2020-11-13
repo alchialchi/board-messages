@@ -168,7 +168,7 @@ export const Messages: React.FC = () => {
               color="primary"
               type="submit"
               onClick={handleSubmit}
-              disabled={disableForm ? true : false}
+              disabled={disableForm}
             >
               Add message
             </Button>
