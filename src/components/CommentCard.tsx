@@ -14,7 +14,7 @@ import { Message, User } from '../types'
 import { EditComponent } from './EditComponent'
 import { DeleteComponent } from './DeleteComponent'
 
-import { useCurrentUser } from './userContext'
+import { useCurrentUser } from '../context/userContext'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

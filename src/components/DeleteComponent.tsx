@@ -3,7 +3,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import { IconButton } from '@material-ui/core'
 
 import { Message } from '../types'
-import { useMessagesContext } from './userContext'
+import { useMessagesContext } from '../context/messagesContext'
 
 interface Props {
   currentMessage: Message

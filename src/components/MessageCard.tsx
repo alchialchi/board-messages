@@ -21,7 +21,7 @@ import { DeleteComponent } from './DeleteComponent'
 import { ReplyComponent } from './ReplyComponent'
 import { CommentCard } from './CommentCard'
 
-import { useCurrentUser } from './userContext'
+import { useCurrentUser } from '../context/userContext'
 
 const useStyles = makeStyles((theme) => ({
   root: {

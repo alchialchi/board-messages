@@ -12,7 +12,8 @@ import {
   DialogTitle,
 } from '@material-ui/core'
 
-import { useCurrentUser, useMessagesContext } from './userContext'
+import { useCurrentUser } from '../context/userContext'
+import { useMessagesContext } from '../context/messagesContext'
 
 interface Props {
   currentMessage: Message

@@ -12,7 +12,8 @@ import {
   TextField,
 } from '@material-ui/core'
 
-import { CurrentUserContext, useMessagesContext } from './userContext'
+import { CurrentUserContext } from '../context/userContext'
+import { useMessagesContext } from '../context/messagesContext'
 import { MessageBoard } from './MessageBoard'
 
 const Wrapper = styled.div`
@@ -69,7 +70,7 @@ const loadUsers = async (): Promise<User[]> => {
   return response.json()
 }
 
-export const MessageContainer: React.FC = () => {
+export const Messages: React.FC = () => {
   const [users, setUsers] = useState<User[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)

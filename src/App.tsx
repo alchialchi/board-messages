@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { MessageContainer } from './components/MessageContainer'
-import { MessagesProvider } from './components/userContext'
+import { Messages } from './components/Messages'
+import { MessagesProvider } from './context/messagesContext'
 
 const App = () => {
   return (
     <MessagesProvider>
-      <MessageContainer />
+      <Messages />
     </MessagesProvider>
   )
 }

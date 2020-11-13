@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { User, Message } from '../types'
-
-export const CurrentUserContext = React.createContext<User | undefined>(
-  undefined
-)
-
-export const useCurrentUser = () => React.useContext(CurrentUserContext)
+import { Message } from '../types'
 
 export const MessagesContext = React.createContext<{
   messages: Message[]

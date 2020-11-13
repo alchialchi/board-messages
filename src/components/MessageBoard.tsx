@@ -3,7 +3,7 @@ import { Grid, Typography } from '@material-ui/core'
 import { MessageCard } from './MessageCard'
 
 import { Message, User } from '../types'
-import { useMessagesContext } from './userContext'
+import { useMessagesContext } from '../context/messagesContext'
 
 interface Props {
   users: User[]

@@ -2,7 +2,8 @@ import React from 'react'
 
 import { render, waitFor, screen } from '@testing-library/react'
 
-import { MessagesProvider, CurrentUserContext } from './userContext'
+import { CurrentUserContext } from '../context/userContext'
+import { MessagesProvider } from '../context/messagesContext'
 
 import { MessageCard } from './MessageCard'
 
