@@ -1,4 +1,4 @@
-# react-messages-board (aka what-kitty-are-you-today)
+# react-messages-board
 
 This project is about a message board where an active user is able to send, comment, edit or delete messages.
 
