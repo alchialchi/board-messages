@@ -1,8 +1,8 @@
 # react-messages-board
 
-This project is about a message board where an active user is able to send, comment, edit or delete messages.
+Message board where an active user can send, comment, edit or delete messages.
 
-The application is build with React (React Hooks and Context), Typescript and Material-UI.
+The application is build with React, Typescript and Material-UI.
 
 ## How to use
 
