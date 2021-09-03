@@ -1,6 +1,6 @@
 # react-messages-board
 
-Message board where an active user can send, comment, edit or delete messages.
+Messages board where an active user can send, comment, edit or delete messages.
 
 The application is build with React, Typescript and Material-UI.
 
